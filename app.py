@@ -209,15 +209,6 @@ if page == "Overview":
     2. **Human vs Property Risk** – Contrasting casualty likelihood vs. property destruction.
     3. **Operational Complexity** – Uncovering patterns in rescues and severe fire spread.
 
-    ---
-
-    💡 *This dashboard is built on a custom **Star Schema** created in DuckDB, with analysis performed in SQL and Python.*
-    """)
-
-# ---------------- PAGE 2: ANALYSIS 1 ----------------
-elif page == "Response vs Risk":
-    st.title("🚒 Analysis: Response is Driven by Risk, Not Volume")
-    st.markdown("""
     This analysis explores *how* and *why* the fire service response changes based on the type of dwelling.
     The data shows that response intensity isn’t driven purely by incident volume—it’s driven by **risk**.
     """)
@@ -446,8 +437,6 @@ elif page == "Human vs. Property Risk":
         
         text = base.mark_text(
             align='center',
-            baseline='bottom',
-            dy=-5
         ).encode(
             text=alt.Text("avg_rescues_per_incident", format=".2f"),
             color=alt.value("black")
@@ -457,16 +446,9 @@ elif page == "Human vs. Property Risk":
         
         st.altair_chart(chart5, use_container_width=True)
 
-    st.caption("‘Unspecified cause’ fires show greatest average spread. ‘Deliberate’ fires lead in rescue complexity.")
-    with st.expander("View Full Data Table"):
-        st.dataframe(df_human_cost_raw)
-
-# ---------------- PAGE 5: CONCLUSIONS ----------------
+# ---------------- PAGE 4: CONCLUSIONS ----------------
 elif page == "Conclusions":
-    # --- **FIX**: Add JavaScript to scroll to top ---
-    st.markdown("<script>window.scrollTo(0, 0);</script>", unsafe_allow_html=True)
-    
-    st.title("🧠 Conclusions & Key Insights")
+    st.title("💡 Conclusions & Strategic Insights")
     st.markdown("""
     This project successfully transformed raw, complex incident data into a queryable star schema, which in turn revealed several key strategic insights:
 
@@ -491,7 +473,7 @@ elif page == "Conclusions":
     - **Intervention & Engineering (Targeted Risk):** A specialist focus on **arson/firesetting prevention** to reduce high-complexity rescue incidents, and continued focus on **building safety and engineering** (e.g., refuse stores, corridors) in flats to mitigate their unique risk profile.
     """)
 
-# ---------------- PAGE 4: METHODOLOGY ----------------
+# ---------------- PAGE 5: METHODOLOGY ----------------
 elif page == "Methodology & ETL":
     # --- **FIX**: Add JavaScript to scroll to top ---
     st.markdown("<script>window.scrollTo(0, 0);</script>", unsafe_allow_html=True)

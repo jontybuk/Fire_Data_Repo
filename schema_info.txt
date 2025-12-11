@@ -1,0 +1,271 @@
+TABLES:
+- dim_alarm
+- dim_damage
+- dim_dwelling
+- dim_fiscal_period
+- dim_ignition
+- dim_items
+- dim_location
+- dim_occupancy
+- dim_other_property
+- dim_personnel
+- dim_response
+- dim_spread
+- dim_territory
+- dim_vehicles
+- dwelling_fires_staging
+- fact_dwelling_fire
+
+--- SCHEMA FOR dim_alarm ---
+alarm_key (INTEGER)
+alarm_system (VARCHAR)
+alarm_system_type (VARCHAR)
+alarm_reason_for_poor_outcome (VARCHAR)
+
+--- SAMPLE DATA FOR dim_alarm ---
+   alarm_key                       alarm_system   alarm_system_type            alarm_reason_for_poor_outcome
+0         21  Alarm Present but did not operate       Mains powered  Fire products did not reach detector(s)
+1         22  Alarm Present but did not operate       Mains powered       Fire in area not covered by system
+2         23  Alarm Present but did not operate  Other/ Unspecified     Faulty system/ Incorrectly installed
+
+--- SCHEMA FOR dim_damage ---
+damage_key (INTEGER)
+fire_damage_extent (VARCHAR)
+fire_damage_code (VARCHAR)
+total_damage_extent (VARCHAR)
+total_damage_code (VARCHAR)
+
+--- SAMPLE DATA FOR dim_damage ---
+   damage_key fire_damage_extent fire_damage_code total_damage_extent total_damage_code
+0         187          51 to 100                5        501 to 1,000                 8
+1         188                  0                0          Over 1,000                 9
+2         193           11 to 20                3            21 to 50                 4
+
+--- SCHEMA FOR dim_dwelling ---
+dwelling_key (INTEGER)
+dwelling_type (VARCHAR)
+building_special_construction_description (VARCHAR)
+
+--- SAMPLE DATA FOR dim_dwelling ---
+   dwelling_key                dwelling_type building_special_construction_description
+0            32               Other dwelling                                  Cladding
+1            33  Bungalow - single occupancy                                     Atria
+2            34     House - single occupancy                           Sandwich panels
+
+--- SCHEMA FOR dim_fiscal_period ---
+fiscal_period_key (INTEGER)
+financial_year (VARCHAR)
+fiscal_year_number (INTEGER)
+start_date (DATE)
+end_date (DATE)
+
+--- SAMPLE DATA FOR dim_fiscal_period ---
+   fiscal_period_key financial_year  fiscal_year_number start_date   end_date
+0                  1        2021/22                2021 2021-04-01 2022-03-31
+1                  2        2022/23                2022 2022-04-01 2023-03-31
+2                  3        2018/19                2018 2018-04-01 2019-03-31
+
+--- SCHEMA FOR dim_ignition ---
+ignition_key (INTEGER)
+accidental_or_deliberate (VARCHAR)
+cause_of_fire (VARCHAR)
+ignition_power (VARCHAR)
+source_of_ignition (VARCHAR)
+
+--- SAMPLE DATA FOR dim_ignition ---
+   ignition_key accidental_or_deliberate                       cause_of_fire                    ignition_power  source_of_ignition
+0           576   Recorded as Deliberate                          Deliberate  Other/ Not known/ Not Applicable  Cigarette lighters
+1           577   Recorded as Accidental         Faulty appliances and leads                          Electric     Washing machine
+2           578   Recorded as Accidental  Placing articles too close to heat  Other/ Not known/ Not Applicable             Candles
+
+--- SCHEMA FOR dim_items ---
+items_key (INTEGER)
+item_ignited (VARCHAR)
+item_causing_spread (VARCHAR)
+
+--- SAMPLE DATA FOR dim_items ---
+   items_key                    item_ignited         item_causing_spread
+0         79      Explosives/ Gas/ Chemicals  Explosives/ Gas/ Chemicals
+1         80  Structural/ Fixtures/ Fittings            Paper/ Cardboard
+2         81          Furniture/ Furnishings          Clothing/ Textiles
+
+--- SCHEMA FOR dim_location ---
+location_key (INTEGER)
+fire_start_location (VARCHAR)
+fire_size_on_arrival (VARCHAR)
+other_property_affected_on_arrival (VARCHAR)
+
+--- SAMPLE DATA FOR dim_location ---
+   location_key       fire_start_location                             fire_size_on_arrival other_property_affected_on_arrival
+0           100              Refuse Store  Limited to floor of origin (not whole building)      Another property was affected
+1           101  Bedroom/ Bedsitting Room                        Limited to room of origin     No other property was affected
+2           102               Living Room                        Limited to room of origin     No other property was affected
+
+--- SCHEMA FOR dim_occupancy ---
+occupancy_key (INTEGER)
+occupancy_type (VARCHAR)
+occupied_normal (VARCHAR)
+
+--- SAMPLE DATA FOR dim_occupancy ---
+   occupancy_key                                         occupancy_type     occupied_normal
+0              7                                              Not known           Not known
+1              9  Couple one or more over pensionable age, no child/ren           Not known
+2             10                        Couple with dependant child/ren  Under construction
+
+--- SCHEMA FOR dim_other_property ---
+other_property_key (INTEGER)
+other_property_affected_close (VARCHAR)
+
+--- SAMPLE DATA FOR dim_other_property ---
+   other_property_key   other_property_affected_close
+0                   1                       Not known
+1                   2   Another property was affected
+2                   3  No other property was affected
+
+--- SCHEMA FOR dim_personnel ---
+personnel_key (INTEGER)
+personnel_bucket (VARCHAR)
+personnel_midpoint (INTEGER)
+
+--- SAMPLE DATA FOR dim_personnel ---
+   personnel_key personnel_bucket  personnel_midpoint
+0              5                9                   9
+1              9       40 or more                  40
+2             10        Not known                <NA>
+
+--- SCHEMA FOR dim_response ---
+response_key (INTEGER)
+response_time_code (VARCHAR)
+response_time_bucket (VARCHAR)
+response_time_minutes_midpoint (DECIMAL(10,2))
+time_at_scene_code (VARCHAR)
+time_at_scene_bucket (VARCHAR)
+time_at_scene_minutes_midpoint (DECIMAL(10,2))
+ignition_to_discovery_bucket (VARCHAR)
+discovery_to_call_bucket (VARCHAR)
+
+--- SAMPLE DATA FOR dim_response ---
+   response_key response_time_code response_time_bucket  response_time_minutes_midpoint time_at_scene_code time_at_scene_bucket  time_at_scene_minutes_midpoint       ignition_to_discovery_bucket discovery_to_call_bucket
+0           237                  5               5 to 6                             5.5                  4        45 to 60 mins                            52.5                    Under 5 minutes          Under 5 minutes
+1           238                  6               6 to 7                             6.5                  3        30 to 45 mins                            37.5  Over 30 minutes and up to 2 hours          Under 5 minutes
+2           239                  5               5 to 6                             5.5                  2        15 to 30 mins                            22.5                    Under 5 minutes              Immediately
+
+--- SCHEMA FOR dim_spread ---
+spread_key (INTEGER)
+spread_of_fire (VARCHAR)
+spread_rank (INTEGER)
+
+--- SAMPLE DATA FOR dim_spread ---
+   spread_key                                spread_of_fire  spread_rank
+0           1  Whole Building/ Affecting more than 2 floors            7
+1           2                                     Not known         <NA>
+2           3                                No fire damage            1
+
+--- SCHEMA FOR dim_territory ---
+territory_key (INTEGER)
+frs_territory (VARCHAR)
+e_code_territory (VARCHAR)
+
+--- SAMPLE DATA FOR dim_territory ---
+   territory_key                frs_territory e_code_territory
+0             90                    Cleveland        E31000007
+1             91  Hampshire and Isle of Wight        E31000017
+2            104                   Shropshire        E31000032
+
+--- SCHEMA FOR dim_vehicles ---
+vehicles_key (INTEGER)
+vehicles_bucket (VARCHAR)
+vehicles_midpoint (INTEGER)
+
+--- SAMPLE DATA FOR dim_vehicles ---
+   vehicles_key vehicles_bucket  vehicles_midpoint
+0             3               2                  2
+1             4       4, 5 or 6                  5
+2             1       7, 8 or 9                  8
+
+--- SCHEMA FOR dwelling_fires_staging ---
+frs_territory (VARCHAR)
+e_code_territory (VARCHAR)
+financial_year (VARCHAR)
+weekday_weekend (VARCHAR)
+day_night (VARCHAR)
+dwelling_type (VARCHAR)
+building_special_construction_description (VARCHAR)
+occupancy_type (VARCHAR)
+occupied_normal (VARCHAR)
+alarm_system (VARCHAR)
+no_alarms (BIGINT)
+alarm_system_type (VARCHAR)
+alarm_reason_for_poor_outcome (VARCHAR)
+ignition_to_discovery (VARCHAR)
+discovery_to_call (VARCHAR)
+late_call (VARCHAR)
+accidental_or_deliberate (VARCHAR)
+cause_of_fire (VARCHAR)
+ignition_power (VARCHAR)
+source_of_ignition (VARCHAR)
+fire_start_location (VARCHAR)
+fire_size_on_arrival (VARCHAR)
+other_property_affected_on_arrival (VARCHAR)
+item_ignited (VARCHAR)
+item_causing_spread (VARCHAR)
+rapid_fire_growth (VARCHAR)
+vehicles (VARCHAR)
+vehicles_code (BIGINT)
+personnel (VARCHAR)
+personnel_code (BIGINT)
+response_time (VARCHAR)
+response_time_code (BIGINT)
+time_at_scene (VARCHAR)
+time_at_scene_code (BIGINT)
+fatality_casualty (VARCHAR)
+rescues (BIGINT)
+evacuations (VARCHAR)
+evacuations_code (BIGINT)
+fire_damage_extent (VARCHAR)
+fire_damage_extent_code (BIGINT)
+total_damage_extent (VARCHAR)
+total_damage_extent_code (BIGINT)
+spread_of_fire (VARCHAR)
+other_property_affected_close (VARCHAR)
+
+--- SAMPLE DATA FOR dwelling_fires_staging ---
+  frs_territory e_code_territory financial_year weekday_weekend  day_night                                 dwelling_type building_special_construction_description                                         occupancy_type occupied_normal                       alarm_system  no_alarms alarm_system_type            alarm_reason_for_poor_outcome              ignition_to_discovery discovery_to_call late_call accidental_or_deliberate         cause_of_fire                    ignition_power                                      source_of_ignition                             fire_start_location fire_size_on_arrival other_property_affected_on_arrival                                                         item_ignited                                                  item_causing_spread rapid_fire_growth vehicles  vehicles_code  personnel  personnel_code response_time  response_time_code time_at_scene  time_at_scene_code fatality_casualty  rescues evacuations  evacuations_code fire_damage_extent  fire_damage_extent_code total_damage_extent  total_damage_extent_code               spread_of_fire   other_property_affected_close
+0          Avon        E31000001        2010/11         Weekday  Afternoon                      House - single occupancy                                      None  Couple one or more over pensionable age, no child/ren        Occupied                       Alarm Absent          0  No alarm present                         No alarm present                       Over 2 hours      Over 2 hours       yes   Recorded as Accidental  Faulty fuel supplies                          Electric                                  Wiring, cabling, plugs                                     Living Room       No fire damage     No other property was affected  Other/ Not known/ Animal/ Decoration/ Celebration/ Vegetation/ None                                                                 Wood              None        1              1  1, 2 or 3               1     Not known                  99  1 to 2 hours                   5              None        0           0                 0            Up to 5                        1             Up to 5                         1    Limited to room of origin  No other property was affected
+1          Avon        E31000001        2010/11         Weekday    Morning  Converted Flat/Maisonette - single occupancy                                      None                        Couple with dependant child/ren        Occupied  Alarm Present but did not operate          1     Mains powered  Fire products did not reach detector(s)  Over 30 minutes and up to 2 hours   Under 5 minutes       yes   Recorded as Deliberate            Deliberate  Other/ Not known/ Not Applicable  Naked flame - Lighted paper, card or other naked flame  Corridor/ Hall/ Open Plan Area/ Reception Area       No fire damage     No other property was affected                                                     Paper/ Cardboard                                                Foam/ Rubber/ Plastic              None        1              1  1, 2 or 3               1      20 to 60                  12  1 to 2 hours                   5              None        0           0                 0            Up to 5                        1             Up to 5                         1    Limited to room of origin  No other property was affected
+2          Avon        E31000001        2010/11         Weekday    Morning                      House - single occupancy                                      None                        Couple with dependant child/ren        Occupied  Alarm Present but did not operate          1   Battery powered                        Defective battery                        Immediately   Under 5 minutes       yes   Recorded as Deliberate            Deliberate  Other/ Not known/ Not Applicable                                               Fireworks                        Bedroom/ Bedsitting Room       No fire damage     No other property was affected                                               Furniture/ Furnishings  Other/ Not known/ Animal/ Decoration/ Celebration/ Vegetation/ None              None        1              1  1, 2 or 3               1     Not known                  99  3 to 4 hours                   7              None        0           0                 0                  0                        0                   0                         0  Limited to item 1st ignited  No other property was affected
+
+--- SCHEMA FOR fact_dwelling_fire ---
+fact_dwelling_fire_id (INTEGER)
+fiscal_period_key (INTEGER)
+territory_key (INTEGER)
+dwelling_key (INTEGER)
+occupancy_key (INTEGER)
+alarm_key (INTEGER)
+ignition_key (INTEGER)
+location_key (INTEGER)
+items_key (INTEGER)
+response_key (INTEGER)
+damage_key (INTEGER)
+spread_key (INTEGER)
+other_property_key (INTEGER)
+no_alarms (INTEGER)
+rescues (INTEGER)
+evacuations (INTEGER)
+response_time_minutes (DECIMAL(10,2))
+time_at_scene_minutes (DECIMAL(10,2))
+late_call_flag (INTEGER)
+fatality_casualty_flag (INTEGER)
+rapid_fire_growth_flag (INTEGER)
+financial_year (VARCHAR)
+weekday_weekend (VARCHAR)
+day_night (VARCHAR)
+personnel_key (INTEGER)
+vehicles_key (INTEGER)
+
+--- SAMPLE DATA FOR fact_dwelling_fire ---
+   fact_dwelling_fire_id  fiscal_period_key  territory_key  dwelling_key  occupancy_key  alarm_key  ignition_key  location_key  items_key  response_key  damage_key  spread_key  other_property_key  no_alarms  rescues  evacuations  response_time_minutes  time_at_scene_minutes  late_call_flag  fatality_casualty_flag  rapid_fire_growth_flag financial_year weekday_weekend day_night  personnel_key  vehicles_key
+0                5881621                  1            121             3             39         38           648            23         43          1698         226           3                   3          1        0            0                   12.5                   22.5               0                       0                       0        2021/22         Weekend   Evening              4             3
+1                5881622                  1            121            19             22         24           276           144         21          2891         220           7                   3          1        0            0                    4.5                   90.0               0                       0                       1        2021/22         Weekend   Evening              4             3
+2                5881623                  1            121            57             21         38           278           144         68          1991         220           7                   3          1        0            0                    5.5                  150.0               0                       0                       0        2021/22         Weekend     Night              4             3
+
